@@ -1,0 +1,12 @@
+<assembly>
+  <id>properties</id>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <directory>properties</directory>
+    </fileSet>
+  </fileSets>
+</assembly>
