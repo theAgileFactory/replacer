@@ -32,7 +32,6 @@
 
 	<properties>
 		<project.build.sourceEncoding>latin1</project.build.sourceEncoding>
-		<sword.properties.plugin>1.2.0</sword.properties.plugin>
 	</properties>
 
 	<distributionManagement>
@@ -55,20 +54,6 @@
 
 	<build>
 		<plugins>
-
-			<plugin>
-				<artifactId>configuration-maven-plugin</artifactId>
-				<groupId>ch.sword.frameworks</groupId>
-				<version>${sword.properties.plugin}</version>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>configuration-construct</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.5</version>
