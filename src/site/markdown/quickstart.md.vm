@@ -3,4 +3,145 @@ Quickstart Guide
 
 This page explains how to use the ${project.artifactId} using Maven.
 
-TODO
+
+Mavenization
+------------
+
+Use a _pom.xml_ file with the following content:
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	
+	<project xmlns="http://maven.apache.org/POM/4.0.0"
+	    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	    <modelVersion>4.0.0</modelVersion>
+	    <groupId>com.agifac.deploy</groupId>
+	    <artifactId>deployable</artifactId>
+	    <version>1.0.0</version>
+	    <name>Deployer</name>
+	    <packaging>pom</packaging>
+	    
+	    <properties>
+	        <project.build.sourceEncoding>latin1</project.build.sourceEncoding>
+		<replacer.plugin.version>1.0.0-SNAPSHOT</replacer.plugin.version>
+	    </properties>
+	    
+	    <dependencies> 
+	        <dependency>
+	            <artifactId>${target.realArtifactId}</artifactId>
+	            <groupId>${target.groupId}</groupId>
+	            <version>${target.version}</version>
+	            <type>zip</type>
+	        </dependency>
+	        <dependency>
+	            <artifactId>${target.realArtifactId}</artifactId>
+	            <groupId>${target.groupId}</groupId>
+	            <version>${target.version}</version>
+	            <classifier>properties</classifier>
+	            <type>zip</type>
+	        </dependency>
+	    </dependencies>
+	    
+	    <build>
+	        <plugins>
+	
+	            <plugin>
+	                <groupId>org.apache.maven.plugins</groupId>
+	                <artifactId>maven-dependency-plugin</artifactId>
+	                <version>2.3</version>
+	                <executions>
+	                    <execution>
+	                        <id>copy-dependencies</id>
+	                        <phase>generate-sources</phase>
+	                        <goals>
+	                            <goal>copy</goal>
+	                        </goals>
+	                        <configuration>
+					<artifactItems>
+						<artifactItem>
+							<outputDirectory>${project-build.directory}/dependencies</outputDirectory>
+							<overWrite>true</overWrite>                            
+							<artifactId>${target.realArtifactId}</artifactId>
+							<groupId>${target.groupId}</groupId>
+							<version>${target.version}</version>
+							<type>zip</type>
+						</artifactItem>
+						<artifactItem>
+							<outputDirectory>${project-build.directory}/dependencies</outputDirectory>
+							<overWrite>true</overWrite>                            
+							<artifactId>${target.realArtifactId}</artifactId>
+							<groupId>${target.groupId}</groupId>
+							<version>${target.version}</version>
+							<type>zip</type>
+							<classifier>properties</classifier>
+						</artifactItem>
+					</artifactItems>
+	                        </configuration>
+	                    </execution>
+	                    <execution>
+	                        <id>unpack-properties</id>
+	                        <phase>generate-sources</phase>
+	                        <goals>
+	                            <goal>unpack-dependencies</goal>
+	                        </goals>
+	                        <configuration>
+	                            <outputDirectory>${project-build.directory}</outputDirectory>
+	                            <overWriteReleases>true</overWriteReleases>
+	                            <overWriteSnapshots>true</overWriteSnapshots>
+	                            <includeArtifactIds>${target.realArtifactId}</includeArtifactIds>
+	                            <includeGroupIds>${target.groupId}</includeGroupIds>
+	                            <includeClassifiers>properties</includeClassifiers>
+	                        </configuration>
+	                    </execution>
+	                </executions>
+	            </plugin>
+	
+	
+		 <plugin>
+			<groupId>com.agifac.deploy</groupId>
+			<artifactId>replacer-maven-plugin</artifactId>
+			<version>${replacer.plugin.version}</version>
+			<executions>
+	                    <execution>
+	                        <id>validate properties</id>
+	                        <phase>generate-sources</phase>
+	                        <goals>
+	                            <goal>check</goal>
+	                        </goals>
+	                        <configuration>
+	                            <source>${target.appsproperties}</source>
+	                            <reference>${project-build.directory}/properties/empty.properties</reference>
+	                        </configuration>
+	                    </execution>
+	                    <execution>
+	                        <id>replace properties</id>
+	                        <phase>generate-sources</phase>
+	                        <goals>
+	                            <goal>replace</goal>
+	                        </goals>
+	                        <configuration>
+	                            <env>${target.appsproperties}</env>
+				    <source>${project-build.directory}/dependencies/${target.realArtifactId}-${target.version}.zip</source>
+				    <resourcesFileName>ch.orange.maven.replacer.properties</resourcesFileName>
+	                        </configuration>
+	                    </execution>
+			</executions>
+		</plugin>
+	       </plugins>
+	        
+	    </build>
+	</project>
+
+
+Maven project usage
+-------------------
+
+	mvn clean install -Dtarget.realArtifactId=my-app -Dtarget.groupId=com.foo.bar -Dtarget.version=1.0.0-SNAPSHOT -Dtarget.appsproperties=localvm.properties
+
+
+Command line usage
+------------------
+
+	mvn -e com.agifac.deploy:replacer-maven-plugin:check -Dsource=localvm.properties -Dreference=empty.properties
+	mvn -e com.agifac.deploy:replacer-maven-plugin:replace -Dsource=myzip.zip -Denv=localvm.properties
+	
