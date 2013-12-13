@@ -34,32 +34,33 @@ import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 import org.codehaus.plexus.archiver.war.WarArchiver;
 import org.codehaus.plexus.archiver.zip.ZipArchiver;
 
+/**
+ * 
+ * 
+ * @author Bernard Wittwer (bernard.wittwer@the-agile-factory.com)
+ * 
+ */
 public class Replacer {
 
 	/*
-	public static void mergeConfiguration(Log log, String encoding,
-			List<String> filters, MavenResourcesFiltering mavenResourcesFiltering,
-			ArchiverManager archiverManager, String archivesExtension,
-			String configurationFileName,
-			MavenProjectHelper mavenProjectHelper, File outputDirectory,
-			MavenProject project, String propertiesExtension,
-			MavenSession session, List<File> files, File filter)
-			throws MojoExecutionException, MojoFailureException {
-		for (File f : files) {
-			log.info("Filtering " + f);
-			File destination = new File(outputDirectory, f.getName());
-			Replacer.filter(log, encoding, filters, mavenResourcesFiltering,
-					archiverManager, archivesExtension, configurationFileName,
-					mavenProjectHelper, destination, project,
-					propertiesExtension, session, f, filter);
-		}
-	}
-	*/
+	 * public static void mergeConfiguration(Log log, String encoding,
+	 * List<String> filters, MavenResourcesFiltering mavenResourcesFiltering,
+	 * ArchiverManager archiverManager, String archivesExtension, String
+	 * configurationFileName, MavenProjectHelper mavenProjectHelper, File
+	 * outputDirectory, MavenProject project, String propertiesExtension,
+	 * MavenSession session, List<File> files, File filter) throws
+	 * MojoExecutionException, MojoFailureException { for (File f : files) {
+	 * log.info("Filtering " + f); File destination = new File(outputDirectory,
+	 * f.getName()); Replacer.filter(log, encoding, filters,
+	 * mavenResourcesFiltering, archiverManager, archivesExtension,
+	 * configurationFileName, mavenProjectHelper, destination, project,
+	 * propertiesExtension, session, f, filter); } }
+	 */
 
 	private static void filter(Log log, String encoding,
 			MavenResourcesFiltering mavenResourcesFiltering,
 			ArchiverManager archiverManager, String archivesExtension,
-			String configurationFileName,
+			String resourcesFileName, String mapperFileName,
 			MavenProjectHelper mavenProjectHelper, File destination,
 			MavenProject project, String propertiesExtension,
 			MavenSession session, File source, File filter)
@@ -73,9 +74,9 @@ public class Replacer {
 					+ e.getMessage(), e);
 		}
 		Archiver am = null;
-		
+
 		System.out.println("archiverManager = " + archiverManager);
-		
+
 		try {
 			if (destination.getName().endsWith(".sar")) {
 				am = archiverManager.getArchiver("jar");
@@ -111,36 +112,28 @@ public class Replacer {
 		um.setSourceFile(source);
 		um.setDestDirectory(temporaryFolder);
 		try {
-			um.extract("META-INF/" + configurationFileName, temporaryFolder);
+			um.extract("META-INF/" + resourcesFileName, temporaryFolder);
 		} catch (ArchiverException e) {
 		}
-		File marker = new File(temporaryFolder, "META-INF/"
-				+ configurationFileName);
-		
+		File marker = new File(temporaryFolder, "META-INF/" + resourcesFileName);
+
 		try {
-			um.extract("META-INF/" + configurationFileName + ".mapper.properties", temporaryFolder);
+			um.extract("META-INF/" + mapperFileName, temporaryFolder);
 		} catch (ArchiverException e) {
 		}
-		
-		File mapper = new File(temporaryFolder, "META-INF/"
-				+ configurationFileName + ".mapper.properties");
-		
+
+		File mapper = new File(temporaryFolder, "META-INF/" + mapperFileName);
+
 		File childFilter = null;
-		
 
-		
 		if (mapper.exists()) {
-			
-			System.out.println("Found child mapper " + mapper.getPath());
-			 
 
-			
-			
-			File tmp = new File(new File(
-					System.getProperty("java.io.tmpdir")),
+			System.out.println("Found child mapper " + mapper.getPath());
+
+			File tmp = new File(new File(System.getProperty("java.io.tmpdir")),
 					Replacer.class.getName() + UUID.randomUUID());
 			tmp.mkdirs();
-			
+
 			List<Resource> rs = new ArrayList<Resource>();
 			Resource r = new Resource();
 			r.setDirectory(mapper.getParent());
@@ -150,40 +143,41 @@ public class Replacer {
 			is.add(mapper.getName());
 			r.setIncludes(is);
 			rs.add(r);
-			
+
 			System.out.println("Added ressource " + r);
-			
+
 			System.out.println("Resulting filter path " + tmp);
-			
+
 			MavenProject mp = new MavenProject();
 			mp.setBuild(new Build());
-			
-			System.out.println("Adding filter to mapper processing "+ filter.getAbsolutePath());
-			mp.getBuild().addFilter(
-					filter.getAbsolutePath());
+
+			System.out.println("Adding filter to mapper processing "
+					+ filter.getAbsolutePath());
+			mp.getBuild().addFilter(filter.getAbsolutePath());
 			try {
-				mavenResourcesFiltering.filterResources(rs,
-						tmp, mp, encoding, Collections.EMPTY_LIST,
-						Collections.EMPTY_LIST, session);
+				mavenResourcesFiltering
+						.filterResources(rs, tmp, mp, encoding,
+								Collections.EMPTY_LIST, Collections.EMPTY_LIST,
+								session);
 			} catch (MavenFilteringException e) {
 				log.error("Unexpected error " + e.getMessage(), e);
-				throw new MojoExecutionException(
-						"Unexpected error " + e.getMessage(), e);
+				throw new MojoExecutionException("Unexpected error "
+						+ e.getMessage(), e);
 			}
-						
-			// Filter the mapper									
-			File mappedfilter = new File(tmp.getPath(), mapper.getName() );
-			
-			System.out.println("Mapped filter is "  + mappedfilter);
-			
-			childFilter = mappedfilter; 					 
-			 
+
+			// Filter the mapper
+			File mappedfilter = new File(tmp.getPath(), mapper.getName());
+
+			System.out.println("Mapped filter is " + mappedfilter);
+
+			childFilter = mappedfilter;
+
 		} else {
-			 System.out.println("No mapper used, propagating parent filter");
-			 
-			 childFilter = filter;
+			System.out.println("No mapper used, propagating parent filter");
+
+			childFilter = filter;
 		}
-		
+
 		if (marker.exists()) {
 			List<String> paths = new ArrayList<String>();
 			try {
@@ -227,17 +221,17 @@ public class Replacer {
 					log.info("Processing " + path);
 					String realName = input.getName();
 					excludesFile.add(path);
-					if (Replacer.isExtension(realName,
-							archivesExtension)) {
+					if (Replacer.isExtension(realName, archivesExtension)) {
 						File tmp = new File(new File(
 								System.getProperty("java.io.tmpdir")),
 								Replacer.class.getName() + UUID.randomUUID());
 						File output = new File(tmp, input.getName());
 						filter(log, encoding, mavenResourcesFiltering,
 								archiverManager, archivesExtension,
-								configurationFileName, mavenProjectHelper,
-								output, project, propertiesExtension, session,
-								input, childFilter);
+								resourcesFileName, mapperFileName,
+								mavenProjectHelper, output, project,
+								propertiesExtension, session, input,
+								childFilter);
 						try {
 							am.addFile(output, path);
 						} catch (ArchiverException e) {
@@ -267,11 +261,13 @@ public class Replacer {
 								mp.getBuild().addFilter(
 										filter.getAbsolutePath());
 								mavenResourcesFiltering.filterResources(rs,
-										tmp, mp, encoding, Collections.EMPTY_LIST,
+										tmp, mp, encoding,
+										Collections.EMPTY_LIST,
 										Collections.EMPTY_LIST, session);
 							} else {
 								mavenResourcesFiltering.filterResources(rs,
-										tmp, project, encoding, Collections.EMPTY_LIST,
+										tmp, project, encoding,
+										Collections.EMPTY_LIST,
 										Collections.EMPTY_LIST, session);
 							}
 						} catch (MavenFilteringException e) {
@@ -346,40 +342,38 @@ public class Replacer {
 	public static void mergeConfiguration(Log log, String encoding,
 			MavenResourcesFiltering mavenResourcesFiltering,
 			ArchiverManager archiverManager, String archivesExtension,
-			String configurationFileName, File sourceFile,
+			String resourcesFileName, String mapperFileName, File sourceFile,
 			File destinationFile, String propertiesExtension, File filter)
 			throws MojoExecutionException, MojoFailureException {
-		
+
 		System.out.println("destinationFile initial: " + destinationFile);
-		
+
 		if (destinationFile == null) {
 			destinationFile = new File(sourceFile.getParentFile(), "merged-"
 					+ sourceFile.getName());
 		} else {
 			destinationFile.getParentFile().mkdirs();
 		}
-		
+
 		System.out.println("destinationFile final: " + destinationFile);
-		
-			/*	
-		List<String> mapperFilters = new ArrayList<String>();
-		mapperFilters.add("prepare.properties");
-		*/
-		
+
+		/*
+		 * List<String> mapperFilters = new ArrayList<String>();
+		 * mapperFilters.add("prepare.properties");
+		 */
+
 		filter(log, encoding, mavenResourcesFiltering, archiverManager,
-				archivesExtension, configurationFileName, null,
+				archivesExtension, resourcesFileName, mapperFileName, null,
 				destinationFile, null, propertiesExtension, null, sourceFile,
 				filter);
 	}
 
-	
-	  public static boolean isExtension(String realName, String extensions)
-	  {
-	    for (String b : extensions.split("\\s*,\\s*")) {
-	      if (realName.endsWith(b)) {
-	        return true;
-	      }
-	    }
-	    return false;
-	  }
+	public static boolean isExtension(String realName, String extensions) {
+		for (String b : extensions.split("\\s*,\\s*")) {
+			if (realName.endsWith(b)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

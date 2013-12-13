@@ -17,26 +17,35 @@ import org.apache.maven.plugins.annotations.Parameter;
 /**
  * Goal that checks the completeness of two properties files
  * 
+ * @author Bernard Wittwer (bernard.wittwer@the-agile-factory.com)
  */
-@Mojo(name = "check", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+@Mojo(name = "check", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresProject = false)
 public class CheckMojo extends AbstractMojo {
 
 	/**
 	 * The source file to be checked
+	 * Default : -
+	 * Required : yes
+	 * 
 	 */
 	 @Parameter(property = "source", required = true )
 	private File source;
 	 
 	 /**
 	  * The reference file to be compared to
+	  * Default : -
+	  * Required : yes
+	  * 
 	  */
 	 @Parameter(property = "reference", required = true )
 	private File reference;
 	 
 	 /**
-	  * Set to true if you want to allow addiotnal properties in source file
+	  * Set to true if you want to allow additional properties in source file
+	  * Default : false
+	  * Required : no
 	  */
-	@Parameter( defaultValue = "false", property = "allowAdditionalProperties", required = true )
+	@Parameter( defaultValue = "false", property = "allowAdditionalProperties", required = false )
 	private String allowAdditionalProperties;
 
 	@Override
@@ -93,7 +102,7 @@ public class CheckMojo extends AbstractMojo {
 		List<String> error = new ArrayList<String>();
 		for (Object name : reference.keySet()) {
 			if (!filter.containsKey(name)) {
-				error.add("Missing property '" + name + "' in filter file");
+				error.add("Missing property '" + name + "' in source file");
 			}
 		}
 		if ("false".equalsIgnoreCase(this.allowAdditionalProperties)) {
