@@ -42,21 +42,6 @@ import org.codehaus.plexus.archiver.zip.ZipArchiver;
  */
 public class Replacer {
 
-	/*
-	 * public static void mergeConfiguration(Log log, String encoding,
-	 * List<String> filters, MavenResourcesFiltering mavenResourcesFiltering,
-	 * ArchiverManager archiverManager, String archivesExtension, String
-	 * configurationFileName, MavenProjectHelper mavenProjectHelper, File
-	 * outputDirectory, MavenProject project, String propertiesExtension,
-	 * MavenSession session, List<File> files, File filter) throws
-	 * MojoExecutionException, MojoFailureException { for (File f : files) {
-	 * log.info("Filtering " + f); File destination = new File(outputDirectory,
-	 * f.getName()); Replacer.filter(log, encoding, filters,
-	 * mavenResourcesFiltering, archiverManager, archivesExtension,
-	 * configurationFileName, mavenProjectHelper, destination, project,
-	 * propertiesExtension, session, f, filter); } }
-	 */
-
 	private static void filter(Log log, String encoding,
 			MavenResourcesFiltering mavenResourcesFiltering,
 			ArchiverManager archiverManager, String archivesExtension,
@@ -75,7 +60,7 @@ public class Replacer {
 		}
 		Archiver am = null;
 
-		System.out.println("archiverManager = " + archiverManager);
+		log.debug("archiverManager = " + archiverManager);
 
 		try {
 			if (destination.getName().endsWith(".sar")) {
@@ -128,7 +113,7 @@ public class Replacer {
 
 		if (mapper.exists()) {
 
-			System.out.println("Found child mapper " + mapper.getPath());
+			log.debug("Found child mapper " + mapper.getPath());
 
 			File tmp = new File(new File(System.getProperty("java.io.tmpdir")),
 					Replacer.class.getName() + UUID.randomUUID());
@@ -144,14 +129,14 @@ public class Replacer {
 			r.setIncludes(is);
 			rs.add(r);
 
-			System.out.println("Added ressource " + r);
+			log.debug("Added ressource " + r);
 
-			System.out.println("Resulting filter path " + tmp);
+			log.debug("Resulting filter path " + tmp);
 
 			MavenProject mp = new MavenProject();
 			mp.setBuild(new Build());
 
-			System.out.println("Adding filter to mapper processing "
+			log.debug("Adding filter to mapper processing "
 					+ filter.getAbsolutePath());
 			mp.getBuild().addFilter(filter.getAbsolutePath());
 			try {
@@ -168,12 +153,12 @@ public class Replacer {
 			// Filter the mapper
 			File mappedfilter = new File(tmp.getPath(), mapper.getName());
 
-			System.out.println("Mapped filter is " + mappedfilter);
+			log.debug("Mapped filter is " + mappedfilter);
 
 			childFilter = mappedfilter;
 
 		} else {
-			System.out.println("No mapper used, propagating parent filter");
+			log.debug("No mapper used, propagating parent filter");
 
 			childFilter = filter;
 		}
@@ -346,7 +331,7 @@ public class Replacer {
 			File destinationFile, String propertiesExtension, File filter)
 			throws MojoExecutionException, MojoFailureException {
 
-		System.out.println("destinationFile initial: " + destinationFile);
+		log.debug("destinationFile initial: " + destinationFile);
 
 		if (destinationFile == null) {
 			destinationFile = new File(sourceFile.getParentFile(), "merged-"
@@ -355,7 +340,7 @@ public class Replacer {
 			destinationFile.getParentFile().mkdirs();
 		}
 
-		System.out.println("destinationFile final: " + destinationFile);
+		log.debug("destinationFile final: " + destinationFile);
 
 		/*
 		 * List<String> mapperFilters = new ArrayList<String>();

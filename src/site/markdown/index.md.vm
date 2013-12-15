@@ -1,5 +1,117 @@
-
 Maven Replacer Plugin
 ==================
 
-TODO
+<a class="entry" name="Intro"></a>
+Introduction
+------------
+
+The ${project.artifactId} is a maven plugin that aims to replace tokens into a package based on property file.
+
+The following elements are involved in the process:
+
+* <img src="images/file-component.png"/>The source archive (can be a _zip_, _war_, _jar_, etc.)
+* <img src="images/file-env.png"/>An environment properties file (format is Java properties file)
+* <img src="images/file-reference.png"/>(optional) A reference property file (that contains the list of properties keys mandatory for the archive)
+
+Why such a plug-in? Well.. the basic maven filtering process is missing key features like recursive replacement within nested archives. 
+
+<a class="entry" name="check"></a>
+"${project.artifactId}:check" goal
+----------------------------------
+
+The [_${project.artifactId}:check_ goal](./check-mojo.html) is used to validate the input environment property file against a reference one.
+
+<img src="images/replacer-goal-check.png" alt="check goal" style="margin: 0 auto; display:block"/>
+
+The outcome of the process is a boolean (to be used in automatic deployment process for validation).
+
+<a class="entry" name="replace"></a>
+"${project.artifactId}:replace" goal
+------------------------------------
+
+The [_${project.artifactId}:replace_ goal](./check-mojo.html) is used perform the actual replacement.
+
+<img src="images/replacer-goal-replace.png" alt="replace goal" style="margin: 0 auto; display:block"/>
+
+The outcome of the process is a copy of the original archive with the tokens being replaced with tokens from the environment property file.
+
+<a class="entry" name="structure"></a>
+Archive structure
+-----------------
+
+In order to perform the replacement the archive to be processed must have some characteristics as shown hereafter:
+
+<img src="images/replacer-archive-structure.png" alt="archive structure" style="margin: 0 auto; display:block"/>
+
+<img src="images/file-resource.png"/>A "resources" file must be located in the META-INF folder. This file is named by default _com.agifac.deploy.replacer.resources.properties_ .
+The content of the file is the list of file and archives (one per line) that contains tokens and must be processed.
+Here is an example of such file:
+
+	lib/my-app.war
+	container/mytomcat.zip
+	scripts/startup.sh
+	readme.txt
+	license.txt
+
+<img src="images/file-mapper.png"/>An optional "mapper" file can be located in the META-INF folder. This file is named by default _com.agifac.deploy.replacer.mapper.properties_ .
+The content of the file is a key-value map between properties of the enclosing file (the archive being processed) and properties of the included archives (called sub-components).
+This mapping file allows to populate properties of the included components with properties from the parent properties.
+More details are available in the next section. Here is an example of such mapper:
+
+	my-app.property.key.1=@my-package.prop.1@
+	my-app.property.key.2=Some static value
+	mytomcat.port.number=@my-package.port.number@
+
+<img src="images/file-files.png"/>The files that must be processed. They will contains standard maven placeholders like in the examples:
+
+Xml file:
+
+	<xml-example>
+		<config>$ {my-app.property.key.2}</config>
+	</xml-example>
+
+Text file:
+
+	Hello world,
+	This is a sample of text file.
+	Built by @my-app.property.key.1@
+	Eof.
+
+<img src="images/file-reference.png"/>The reference property file. By convention this file is named _empty.property_. This file can be used in the [_${project.artifactId}:check_ process](./check-mojo.html).
+It is not used by the [_${project.artifactId}:replace_ goal](./replace-mojo.html) itself.
+This file is a sample of properties, it is used also as documentation as in the below example:
+
+	# Reference file for "my-package" project
+	 	
+	# First property, used for xxxxx
+	# Format : String
+	# Can be empty : yes
+	my-package.prop.1=Hello world
+	
+	# Listen port of the server hosting the application
+	# Format : int (TCP port range)
+	# Can be empty : no
+	my-package.port.number=8088
+
+<a class="entry" name="components"></a>
+Sub components (included archives)
+----------------------------------
+
+In the case of sub-components <img src="images/file-component.png"/>, the above pattern is simple applied recursively as in this example:
+
+<img src="images/replacer-archive-subcomponents.png" alt="archive components" style="margin: 0 auto; display:block"/>
+ 
+<a class="entry" name="process"></a>
+Replacement process
+-------------------
+
+The replacement process is pretty straightforward once all the meta-data is present.
+The following figure explains the process in the above example:
+
+<img src="images/replacer-process.png" alt="replacement process" style="margin: 0 auto; display:block"/>
+
+Basically the plugin will process the files and archives based on the _ressource_ file.
+The sub-components are processed recursively. At each recursion a temporary property file is created by using the _mapper_file.
+
+
+

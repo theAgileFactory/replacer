@@ -3,11 +3,25 @@ Quickstart Guide
 
 This page explains how to use the ${project.artifactId} using Maven.
 
+The plugin can be used on console (without a maven project) or as part of a maven build (within a pom.xml)
 
-Mavenization
-------------
 
-Use a _pom.xml_ file with the following content:
+Command line usage
+------------------
+
+The goals can be called as in the following examples (note that the version of the plugin has been ommited in):
+
+	mvn com.agifac.deploy:replacer-maven-plugin:check -Dsource=localvm.properties -Dreference=empty.properties
+	mvn com.agifac.deploy:replacer-maven-plugin:replace -Dsource=myzip.zip -Denv=localvm.properties
+	
+For additional information about the goals, use the following command:
+
+	mvn com.agifac.deploy:replacer-maven-plugin:help -Ddetail=true -Dgoal=<goal-name>
+
+Maven project usage
+-------------------
+
+Inside of your _pom.xml_ use the plugin as in the following example :
 
 	<?xml version="1.0" encoding="UTF-8"?>
 	
@@ -23,7 +37,7 @@ Use a _pom.xml_ file with the following content:
 	    
 	    <properties>
 	        <project.build.sourceEncoding>latin1</project.build.sourceEncoding>
-		<replacer.plugin.version>1.0.0-SNAPSHOT</replacer.plugin.version>
+		 	<replacer.plugin.version>${project.version}</replacer.plugin.version>
 	    </properties>
 	    
 	    <dependencies> 
@@ -59,7 +73,7 @@ Use a _pom.xml_ file with the following content:
 	                        <configuration>
 					<artifactItems>
 						<artifactItem>
-							<outputDirectory>${project-build.directory}/dependencies</outputDirectory>
+							<outputDirectory>$ {project.build.directory}/dependencies</outputDirectory>
 							<overWrite>true</overWrite>                            
 							<artifactId>${target.realArtifactId}</artifactId>
 							<groupId>${target.groupId}</groupId>
@@ -67,7 +81,7 @@ Use a _pom.xml_ file with the following content:
 							<type>zip</type>
 						</artifactItem>
 						<artifactItem>
-							<outputDirectory>${project-build.directory}/dependencies</outputDirectory>
+							<outputDirectory>$ {project.build.directory}/dependencies</outputDirectory>
 							<overWrite>true</overWrite>                            
 							<artifactId>${target.realArtifactId}</artifactId>
 							<groupId>${target.groupId}</groupId>
@@ -85,7 +99,7 @@ Use a _pom.xml_ file with the following content:
 	                            <goal>unpack-dependencies</goal>
 	                        </goals>
 	                        <configuration>
-	                            <outputDirectory>${project-build.directory}</outputDirectory>
+	                            <outputDirectory>$ {project.build.directory}</outputDirectory>
 	                            <overWriteReleases>true</overWriteReleases>
 	                            <overWriteSnapshots>true</overWriteSnapshots>
 	                            <includeArtifactIds>${target.realArtifactId}</includeArtifactIds>
@@ -110,7 +124,7 @@ Use a _pom.xml_ file with the following content:
 	                        </goals>
 	                        <configuration>
 	                            <source>${target.appsproperties}</source>
-	                            <reference>${project-build.directory}/properties/empty.properties</reference>
+	                            <reference>$ {project.build.directory}/properties/empty.properties</reference>
 	                        </configuration>
 	                    </execution>
 	                    <execution>
@@ -121,7 +135,7 @@ Use a _pom.xml_ file with the following content:
 	                        </goals>
 	                        <configuration>
 	                            <env>${target.appsproperties}</env>
-				    <source>${project-build.directory}/dependencies/${target.realArtifactId}-${target.version}.zip</source>
+				    <source>$ {project.build.directory}/dependencies/${target.realArtifactId}-${target.version}.zip</source>
 				    <resourcesFileName>ch.orange.maven.replacer.properties</resourcesFileName>
 	                        </configuration>
 	                    </execution>
@@ -133,15 +147,7 @@ Use a _pom.xml_ file with the following content:
 	</project>
 
 
-Maven project usage
--------------------
+The example project above can be called using the following command line:
 
 	mvn clean install -Dtarget.realArtifactId=my-app -Dtarget.groupId=com.foo.bar -Dtarget.version=1.0.0-SNAPSHOT -Dtarget.appsproperties=localvm.properties
 
-
-Command line usage
-------------------
-
-	mvn -e com.agifac.deploy:replacer-maven-plugin:check -Dsource=localvm.properties -Dreference=empty.properties
-	mvn -e com.agifac.deploy:replacer-maven-plugin:replace -Dsource=myzip.zip -Denv=localvm.properties
-	
