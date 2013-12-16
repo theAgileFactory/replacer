@@ -3,7 +3,7 @@
 
   <groupId>com.agifac.deploy</groupId>
   <artifactId>replacer-maven-plugin</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>Component "replacer", of scope "com.agifac.deploy"</name>
   <description>This is the component xxx</description>
 
@@ -16,9 +16,9 @@
 	</organization>
 
 	<scm>
-		<connection>scm:svn:file:///var/www/svn/deploy/replacer/tags/replacer-maven-plugin-1.0.0</connection>
-		<developerConnection>scm:svn:file:///var/www/svn/deploy/replacer/tags/replacer-maven-plugin-1.0.0</developerConnection>
-		<url>scm:svn:file:///var/www/svn/deploy/replacer/tags/replacer-maven-plugin-1.0.0</url>
+		<connection>scm:svn:file:///var/www/svn/deploy/replacer/trunk</connection>
+		<developerConnection>scm:svn:file:///var/www/svn/deploy/replacer/trunk</developerConnection>
+		<url>scm:svn:file:///var/www/svn/deploy/replacer/trunk</url>
 	</scm>
 	
 	<ciManagement>
