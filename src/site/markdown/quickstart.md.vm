@@ -135,8 +135,7 @@ Inside of your _pom.xml_ use the plugin as in the following example :
 	                        </goals>
 	                        <configuration>
 	                            <env>${target.appsproperties}</env>
-				    <source>$ {project.build.directory}/dependencies/${target.realArtifactId}-${target.version}.zip</source>
-				    <resourcesFileName>ch.orange.maven.replacer.properties</resourcesFileName>
+				    <source>$ {project.build.directory}/dependencies/${target.realArtifactId}-${target.version}.zip</source>				    
 	                        </configuration>
 	                    </execution>
 			</executions>
