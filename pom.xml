@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.agifac.deploy</groupId>
   <artifactId>replacer-maven-plugin</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>Component "replacer", of scope "com.agifac.deploy"</name>
   <description>This is the component xxx</description>
 
@@ -17,9 +16,9 @@
 	</organization>
 
 	<scm>
-		<connection>scm:svn:file:///var/www/svn/deploy/replacer/trunk</connection>
-		<developerConnection>scm:svn:file:///var/www/svn/deploy/replacer/trunk</developerConnection>
-		<url>scm:svn:file:///var/www/svn/deploy/replacer/trunk</url>
+		<connection>scm:svn:file:///var/www/svn/deploy/replacer/tags/replacer-maven-plugin-1.0.0</connection>
+		<developerConnection>scm:svn:file:///var/www/svn/deploy/replacer/tags/replacer-maven-plugin-1.0.0</developerConnection>
+		<url>scm:svn:file:///var/www/svn/deploy/replacer/tags/replacer-maven-plugin-1.0.0</url>
 	</scm>
 	
 	<ciManagement>
