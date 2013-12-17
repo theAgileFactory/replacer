@@ -4,8 +4,8 @@
   <groupId>com.agifac.deploy</groupId>
   <artifactId>replacer-maven-plugin</artifactId>
   <version>1.0.1-SNAPSHOT</version>
-  <name>Component "replacer", of scope "com.agifac.deploy"</name>
-  <description>This is the component xxx</description>
+  <name>Maven Plugin "${project.artifactId}"</name>
+  <description>The ${project.artifactId} is a maven plugin that aims to replace tokens into a package based on property file.</description>
 
   <packaging>maven-plugin</packaging>
 

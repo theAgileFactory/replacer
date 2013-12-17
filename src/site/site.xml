@@ -15,6 +15,12 @@
             <topBarEnabled>true</topBarEnabled>
             <sideBarEnabled>true</sideBarEnabled>
             <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+	    <topBarIcon>
+		<name>The Agile Factory</name>
+		<alt>The Agile Factory</alt>
+		<src>/images/topbar-logo.png</src>
+		<href>/index.html</href>
+	    </topBarIcon>
         </fluidoSkin>
     </custom>
 
