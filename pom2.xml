@@ -3,10 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.agifac.deploy</groupId>
 	<artifactId>replacer-maven-plugin</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>Maven Plugin "${project.artifactId}"</name>
 	<description>The ${project.artifactId} is a maven plugin that aims to replace tokens into a package based on property file.</description>
 	<packaging>maven-plugin</packaging>
+	<url>https://github.com/theAgileFactory</url>
 
 	<licenses>
 		<license>
@@ -165,6 +166,15 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
 				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
