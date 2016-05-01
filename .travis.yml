@@ -1,0 +1,50 @@
+language: java
+jdk:
+- oraclejdk8
+env:
+  global:
+  - ACTIVATOR_VERSION=1.3.7
+  - ACTIVATOR_ZIP_FILE=typesafe-activator-${ACTIVATOR_VERSION}-minimal.zip
+  - ACTIVATOR_ZIP_URL=http://downloads.typesafe.com/typesafe-activator/${ACTIVATOR_VERSION}/${ACTIVATOR_ZIP_FILE}
+  - PLAY2_HOME=${TRAVIS_BUILD_DIR}/activator-${ACTIVATOR_VERSION}-minimal
+  - SBT_EXECUTABLE_NAME=activator
+  - GH_REF=github.com/theAgileFactory/replacer
+  - secure: HBEJE3Kmog7dACUY35nTjstwJLYRgS+xUbOe3+6ZriAc+2M9n80/6tj45FeFylZj5AzmoeqP09LerA4EWpYfVAuDm2OyOLDzY1iZ1ZsAMdSoKGVENJS3LpLCjEA8/iUqjr0UBJkKurArG05LvgWmWn03HhXsGbfcL+XQfTcWvrlzrBMwR2qbb0QliG/vlLkxYh1aeaGT2X6hSRa3B320qlLkZI8vX4mIFzia8CQF3UiWME31cvgaI7iv2obErDRtqXRbMSgRpnfn9ZSvdSY5tttsp/C9UG86E8QvMVJ/KfRYws7KYRX6nYisKNrhKeVfKbtz3vULIBjPq9gRrcW6eUDMcAHtilaktonaeP8eSwylXYIlMeizD0syq1kgSDA8vPM8lRQYLCUpEgted4eoyfVo+MylUMOXVJG0NTWUCE36cHsrmMTlvqvQqd0o/+TFBkNqgQw7IcZ3YCNZLc3otMCAK/62hqWo3Rx45LXm8DoHrQmLzAzTaOisev2czvFkqxRJZn1v+2eLZjiBC8Xam82Rq+dGZ6o3a2l8o2W5qHSJlv14M8SHOpyArtGZpvRsHR9+ODoDi/Efpcz0rcL576lHOEGZEjWrEVnzXAgyrE4rKYdOodRHU2XwEo9pNn588yvg+ClatOXelSxJLnvR8ggk7LBQ2gIM//xO3E4JAlg=
+  - secure: CrgfhJuQxUP5OYePHePNd9+1Gt0qD2Ch/Nsi5xUBGHw5uAgfaYL/g9fzv19NcFGGETd7ABO/v36FWv4yqmLCHu8qxcWkVC0O8kSac8TQohQe+30oFnujwCCFBWgfVGG5OPPf+BAjsZl383PJuS5QGoJnJGtigOIBa32qoHnEb7nCv52p/DRLcRvzPUCM7Fy5SzBk3HeB7Q5EPhchJV1nkCSxBC595UXaJiCHy3XkWWL9Jz0m7TUeDUkGTzoWsw/cNS3I2Wr6OMwursJcqmrdp+cxFZbR4TwqG0oTd0GLI6eDh1UIfJ7nyHT5aiw1HT0JUAY47bUn5bQBXcAradBLOvaNZytX0KWSH9m76EedmUr6SI7gfEF3Bx79Xw4BMYfhSGsE56HB7bHvHyQAaDX/Uq+RWh4vPI2srv1+e1/rsacMERFbANrxblO/JHvLTF0T48HZYsf160LsY19zWzh0W8D39tCopiCSKW/c9MbxZ8GbLZNMBsCIQqhXtosyahmKsO6QvsOJ6U2ey8fI5N0w2rIXkZwr8Atko+xvPfFU3ZPHd5WG1xv/wReJk41sIE/Z4NPbH59cedWc52T0AIZSMvFA5hDLY7ZmcALiiu6xjYCWKEM7X/UXQZ/6erjejv1fjm0U/+c+pgUAGqpDIzoEshunWF07BOY2fj1g9Q1Aq+U=
+  - secure: ImM5bGzSMM+9/5msE0Tpb61HQrm8I9SrZ/q/firO1Zh4UzATVIUjQaK3BsNcMgaZx4VglVrGy1TTfS3dMa34Vj2Xx0SZY9s1SKpHXjR43wL/gwWlyLuqclK5julhKE9GTrNx7m9XyGG7RWS8mgpOqfTpYUWDjroHphSWMrEqLpxQ3ZiKCEvJuWcnuIqD9QmcCjXIvWxBSv74NpbYzYx81i4iymI2IRGxHgqLcI7m3sj1byKCIEFNvlb0rPpreGh4UBgzvptFnAyNMpjDSLs1ENLWqQtF29nUIHIMXAM4pRbYzqNnctHlO1t5obHowwHnHJdCdG53/u5pIZHdLDDnu8/SWeimrnDJZyxHt2yigBnrZUhS4qD1R+woTf0fwWmXUNEdYfYo14FgyIkNw/TBIhCkItuirPr3I9MkSfsDY8tefvENWVeeitYIHLDxjsGokkrGfMeuUa+gWsvC0VlqKRp+XQoZOmAMsnuHBHWo+eLw5rQ3C/CoJHqB1sYSscFSNxrCPaOB8UwBstIosZ+4pPGJPR91XfUNqzftpib6XHBKG4fp4c1h2dplOQXvUVTFiX9l1i7h18i2QCBjuuX6J4OALxOB8LtSud4AYXzwUbHQelDUvvS8f36ttkMjD/p3+rr2eOnybVkTN08NewJTlft2sbtZh4KsE6ei/j1ZXqU=
+  - secure: N2JcMhONrdGLhZ12ocn/+VoYqmdT1DuOVCKJk++u7Ww7n67gP7TYMvay8mR7Fr0gSvQnrc/q4UuSC4+aMaxRmH9M+VaQYMqHp4riFiK+VyL4d6Tz3UBAeeOmQ0PkKBsAiHq059vFHJRB0LlsWldUYyK09OnXPwxy0bBTGEK053tHdEWKNDG/rBh9xFlHhxaVfdpDcOBDQNLKvqcJtdxjBOWTVQ979nJovLewPCYbSp9bTSbGcB9RtAKMmBp1VuxSpJCmln1Rd1BunXO3OIRF47nYRCXITi/G0ZXUULLPY29Mx9m3AHJ6D/epa19DalZJTLS5yGqQAuVc/jGVTiTFGTGrf1jkNGpaJ6hLhTHWg0F7n1M36L5zfcR61+fDQ1BO8G0fMOJLJnFdwf1rQwnhsx7C2mJDshIW1cZe01R3nisNQ8NIWfRwaFmOni0hgz/I9Kn+8Iv2C/Lupj6hqh7o5ch409IJu5vzWT8ug64YkHnB5gELByeoSJS5PxoEy1RkYFenDBgGxXtFRpTvrgpBVAlaua21e4yP9an2+AGk1uhRruoMxTtuzIYwSWFtlWQB2ud+2B5bKQKow0sYFpjfZzg6CjIjzntqrHprx9qMqdG7CzrTMnw3LuABDK4NYYYx8gxH0R71/5sBb8e7jA0ovXTAiJMofL7ECrcBZ2tBBdE=
+before_install:
+- sudo apt-get update
+- sudo apt-get install --only-upgrade -y oracle-java8-installer
+- mkdir -p ~/.gnupg
+- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in secring.gpg.enc -out ~/.gnupg/secring.gpg
+  -d
+- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in pubring.gpg.enc -out ~/.gnupg/pubring.gpg
+  -d
+- echo "<settings><servers><server><id>ossrh</id><username>\${OSSRH_JIRA_USERNAME}</username><password>\${OSSRH_JIRA_PASSWORD}</password></server></servers></settings>"
+  > ~/.m2/settings.xml
+install:
+- wget ${ACTIVATOR_ZIP_URL}
+- unzip -q ${ACTIVATOR_ZIP_FILE}
+script:
+- mvn -f pom2.xml clean install gpg:sign -Dgpg.passphrase="${GPG_PASSPHRASE}" --settings
+  ~/.m2/settings.xml
+after_success:
+- .travis/deploy.sh
+after_script:
+- rm ~/.gnupg/secring.gpg
+- rm ~/.gnupg/pubring.gpg
+- rm ~/.m2/settings.xml
+notifications:
+  email: true
+branches:
+  only:
+  - master
+scala:
+- 2.11.8
+cache:
+  directories:
+  - .autoconf
+  - ~/.m2
+  - ~/.sbt
+  - ~/.ivy
