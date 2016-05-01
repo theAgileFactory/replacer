@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/theAgileFactory/replacer.svg?branch=master)](https://travis-ci.org/theAgileFactory/replacer)
+
 # Replacer
 The replacer is a tool which is used in BizDock "packaging process".
 
